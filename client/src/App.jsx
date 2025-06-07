@@ -20,7 +20,7 @@ const App = () => {
   return (
     <>
       <Navbar />
-      <ScrollToHash />
+     
 
       <Routes>
         <Route
