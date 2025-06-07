@@ -1,16 +1,16 @@
-import  { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
-
+  const location = useLocation();
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
-  }, []);
+  }, [location]);
 
   const toggleMenu = () => setMenuOpen(prev => !prev);
 
@@ -20,6 +20,24 @@ const Navbar = () => {
     setIsAuthenticated(false);
     navigate('/');
   };
+  const handleHashLink = (hash) => {
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    setMenuOpen(false);
+  };
 
   return (
     <nav className="bg-[#ff4c68] text-white px-6 py-4">
@@ -28,13 +46,28 @@ const Navbar = () => {
 
         <ul className="hidden md:flex space-x-8 items-center font-light text-lg">
           <li>
-            <Link to="/#contact" className="hover:underline">Contact</Link>
+            <button 
+              onClick={() => handleHashLink('#contact')} 
+              className="hover:underline cursor-pointer"
+            >
+              Contact
+            </button>
           </li>
           <li>
-            <Link to="/#pricing" className="hover:underline">Pricing</Link>
+            <button 
+              onClick={() => handleHashLink('#pricing')} 
+              className="hover:underline cursor-pointer"
+            >
+              Pricing
+            </button>
           </li>
           <li>
-            <Link to="/#download" className="hover:underline">Download</Link>
+            <button 
+              onClick={() => handleHashLink('#download')} 
+              className="hover:underline cursor-pointer"
+            >
+              Download
+            </button>
           </li>
 
           {!isAuthenticated ? (
@@ -51,14 +84,21 @@ const Navbar = () => {
               </li>
             </>
           ) : (
-            <li>
-              <button
-                onClick={handleLogout}
-                className="bg-white text-[#ff4c68] font-semibold px-4 py-1 rounded hover:bg-gray-200"
-              >
-                Logout
-              </button>
-            </li>
+            <>
+              <li>
+                <Link to="/profile" className="hover:underline">
+                  Profile
+                </Link>
+              </li>
+              <li>
+                <button
+                  onClick={handleLogout}
+                  className="bg-white text-[#ff4c68] font-semibold px-4 py-1 rounded hover:bg-gray-200"
+                >
+                  Logout
+                </button>
+              </li>
+            </>
           )}
         </ul>
 
@@ -73,15 +113,24 @@ const Navbar = () => {
 
       {menuOpen && (
         <div className="md:hidden mt-4 space-y-3 text-lg font-light">
-          <Link to="/#contact" onClick={() => setMenuOpen(false)} className="block px-4 py-2 hover:bg-[#ff3a55]">
+          <button 
+            onClick={() => handleHashLink('#contact')} 
+            className="block w-full text-left px-4 py-2 hover:bg-[#ff3a55]"
+          >
             Contact
-          </Link>
-          <Link to="/#pricing" onClick={() => setMenuOpen(false)} className="block px-4 py-2 hover:bg-[#ff3a55]">
+          </button>
+          <button 
+            onClick={() => handleHashLink('#pricing')} 
+            className="block w-full text-left px-4 py-2 hover:bg-[#ff3a55]"
+          >
             Pricing
-          </Link>
-          <Link to="/#download" onClick={() => setMenuOpen(false)} className="block px-4 py-2 hover:bg-[#ff3a55]">
+          </button>
+          <button 
+            onClick={() => handleHashLink('#download')} 
+            className="block w-full text-left px-4 py-2 hover:bg-[#ff3a55]"
+          >
             Download
-          </Link>
+          </button>
 
           {!isAuthenticated ? (
             <>
@@ -97,15 +146,20 @@ const Navbar = () => {
               </Link>
             </>
           ) : (
-            <button
-              onClick={() => {
-                handleLogout();
-                setMenuOpen(false);
-              }}
-              className="block w-full text-left bg-white text-[#ff4c68] font-semibold px-4 py-2 rounded mt-2 hover:bg-gray-200"
-            >
-              Logout
-            </button>
+            <>
+              <Link to="/profile" onClick={() => setMenuOpen(false)} className="block px-4 py-2 hover:bg-[#ff3a55]">
+                Profile
+              </Link>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left bg-white text-[#ff4c68] font-semibold px-4 py-2 rounded mt-2 hover:bg-gray-200"
+              >
+                Logout
+              </button>
+            </>
           )}
         </div>
       )}
