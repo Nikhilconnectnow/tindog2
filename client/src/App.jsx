@@ -3,24 +3,24 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import FeaturesSection from './components/Features';   
-import Pricing from './components/Price';                  
-import TestimonialCarousel from './components/Crousal'; 
-import AppCTA from './components/Cta';                    
+import FeaturesSection from './components/Features';
+import Pricing from './components/Price';
+import TestimonialCarousel from './components/Crousal';
+import AppCTA from './components/Cta';
 import Footer from './components/Footer';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-
-
 import PrivateRoute from './routes/PrivateRoute';
+import ScrollToHash from './ScrollToHash';
 
 const App = () => {
   return (
     <>
       <Navbar />
+      <ScrollToHash />
 
       <Routes>
         <Route
@@ -35,12 +35,10 @@ const App = () => {
             </>
           }
         />
-
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-
         <Route
           path="/profile"
           element={

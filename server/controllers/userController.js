@@ -1,11 +1,8 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/sendEmail');
-const bcrypt = require('bcryptjs');
 
 const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-// REGISTER
 exports.registerUser = async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -23,7 +20,6 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// LOGIN
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -41,7 +37,7 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// GET USER BY EMAIL
+
 exports.getUserByEmail = async (req, res) => {
   const email = req.params.email;
   try {
@@ -53,7 +49,7 @@ exports.getUserByEmail = async (req, res) => {
   }
 };
 
-// UPDATE NAME
+
 exports.updateUserName = async (req, res) => {
   const { email, name } = req.body;
   try {
@@ -64,7 +60,7 @@ exports.updateUserName = async (req, res) => {
   }
 };
 
-// FORGOT PASSWORD
+
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
@@ -76,7 +72,8 @@ exports.forgotPassword = async (req, res) => {
     user.resetTokenExpire = Date.now() + 15 * 60 * 1000;
     await user.save();
 
-    const resetURL = `http://localhost:5173/reset-password?token=${token}`;
+    // const resetURL = `http://localhost:5173/reset-password?token=${token}`;
+    const resetURL = `https://tindog2-sigma.vercel.app/reset-password?token=${token}`;
     await sendEmail(email, 'Password Reset', `Reset your password here: ${resetURL}`);
 
     res.json({ message: 'Password reset email sent' });
@@ -85,7 +82,7 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-// RESET PASSWORD (fully fixed)
+
 exports.resetPassword = async (req, res) => {
   const { token, newPassword } = req.body;
   try {
@@ -101,7 +98,7 @@ exports.resetPassword = async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired token' });
     }
 
-    // Set new password and trigger pre-save hook
+   
     user.set('password', newPassword);
     user.resetToken = undefined;
     user.resetTokenExpire = undefined;
