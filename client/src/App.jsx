@@ -14,7 +14,7 @@ import Profile from './pages/Profile';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import PrivateRoute from './routes/PrivateRoute';
-import ScrollToHash from './ScrollToHash';
+
 
 const App = () => {
   return (
